@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    database-platform: com.springboot.sqlite.SQLiteDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  datasource:
+    url: jdbc:sqlite:database/database.sqlite
+    drive-class-name: org.sqlite.JDBC
