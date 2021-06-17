@@ -1,6 +1,11 @@
 FROM openjdk:11-jre-slim
 
-WORKDIR home/application
+ENV DIRPATH=/home/application
+
+WORKDIR ${DIRPATH}
+
+VOLUME ${DIRPATH}/database
+VOLUME ${DIRPATH}/images
 
 COPY target/sqlite-0.0.1-SNAPSHOT.jar .
 

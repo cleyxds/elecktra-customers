@@ -2,54 +2,51 @@ package net.cleyxds.sqlite.api.controller;
 
 import net.cleyxds.sqlite.domain.model.Customer;
 import net.cleyxds.sqlite.domain.repository.CustomerRepository;
+import net.cleyxds.sqlite.domain.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
 
   @Autowired
-  private CustomerRepository repository;
+  private CustomerService service;
 
   @GetMapping
   public List<Customer> list() {
-    return repository.findAll();
+    return service.findAll();
   }
 
   @GetMapping("/{id}")
   public Customer fetch(@PathVariable Long id) {
-    Optional<Customer> customer = repository.findById(id);
-
-    return customer.orElse(null);
+    return service.fetchById(id);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Customer create(@RequestBody Customer customer) {
-    customer = repository.save(customer);
+  public ResponseEntity<Customer> create(@RequestBody Customer customer) {
+    service.create(customer);
 
-    return customer;
+    return ResponseEntity.created(null).body(customer);
   }
 
   @PutMapping("/{id}")
-  @ResponseStatus(HttpStatus.OK)
-  public Customer update(@PathVariable Long id, @RequestBody Customer customer) {
-    return repository.findById(id).map(updatedCustomer -> {
-      updatedCustomer.setName(customer.getName());
-      updatedCustomer.setPhone(customer.getPhone());
-      return repository.save(updatedCustomer);
-    }).orElse(null);
+  public ResponseEntity<Customer> update(@PathVariable Long id, @RequestBody Customer customer) {
+    service.update(id, customer);
+
+    return ResponseEntity.created(null).build();
   }
 
   @DeleteMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable Long id) {
-    repository.deleteById(id);
+  public ResponseEntity<Customer> delete(@PathVariable Long id) {
+    service.delete(id);
+
+    return ResponseEntity.noContent().build();
   }
 
 }
