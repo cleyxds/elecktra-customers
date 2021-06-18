@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>net.cleyxds</groupId>
-	<artifactId>sqlite</artifactId>
+	<artifactId>springcustomers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sqlite</name>
-	<description>CRUD SQLite project made with Spring</description>
+	<name>springcustomers</name>
+	<description>Spring REST API for customers service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

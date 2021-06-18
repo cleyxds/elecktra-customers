@@ -3,8 +3,11 @@ package net.cleyxds.sqlite.domain.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -28,7 +31,12 @@ public class Customer {
   @Column(nullable = false)
   private String password;
 
-  @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer", fetch = FetchType.LAZY)
+  @OneToOne(cascade = CascadeType.ALL)
   private CustomerImage image;
+
+  @Column(name = "created_at")
+  private LocalDate createdAt;
+
+  private Integer devices;
 
 }

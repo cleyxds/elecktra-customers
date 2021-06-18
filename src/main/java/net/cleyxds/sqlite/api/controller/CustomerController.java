@@ -1,7 +1,7 @@
 package net.cleyxds.sqlite.api.controller;
 
+import net.cleyxds.sqlite.api.dto.CustomerDTO;
 import net.cleyxds.sqlite.domain.model.Customer;
-import net.cleyxds.sqlite.domain.repository.CustomerRepository;
 import net.cleyxds.sqlite.domain.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +18,13 @@ public class CustomerController {
   private CustomerService service;
 
   @GetMapping
-  public List<Customer> list() {
+  public List<CustomerDTO> DTO() {
     return service.findAll();
   }
 
   @GetMapping("/{id}")
-  public Customer fetch(@PathVariable Long id) {
-    return service.fetchById(id);
+  public CustomerDTO fetch(@PathVariable Long id) {
+    return service.fetchDTOById(id);
   }
 
   @PostMapping
@@ -32,7 +32,7 @@ public class CustomerController {
   public ResponseEntity<Customer> create(@RequestBody Customer customer) {
     service.create(customer);
 
-    return ResponseEntity.created(null).body(customer);
+    return ResponseEntity.created(null).build();
   }
 
   @PutMapping("/{id}")
@@ -43,7 +43,7 @@ public class CustomerController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Customer> delete(@PathVariable Long id) {
+  public ResponseEntity delete(@PathVariable Long id) {
     service.delete(id);
 
     return ResponseEntity.noContent().build();
