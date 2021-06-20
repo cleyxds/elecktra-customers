@@ -3,16 +3,15 @@ package net.cleyxds.sqlite.domain.repository;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public interface ImageRepositoryService {
+public interface ImageServiceRepository {
 
 	void init();
 
 	void store(MultipartFile file, Long id);
-
-	void store(MultipartFile file);
 
 	Stream<Path> loadAll();
 
@@ -21,5 +20,9 @@ public interface ImageRepositoryService {
 	Resource loadAsResource(String filename);
 
 	void deleteAll();
+
+	Path loadById(Long id);
+
+	void deleteById(Long id);
 
 }

@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.cleyxds.sqlite.domain.model.Customer;
-import net.cleyxds.sqlite.domain.model.CustomerImage;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +17,7 @@ public class CustomerDTO implements Serializable {
   private String login;
   private Integer devices;
   private String avatar_url;
-  private LocalDate created_at;
+  private String created_at;
 
   public CustomerDTO(Customer entity) {
     id = entity.getId();

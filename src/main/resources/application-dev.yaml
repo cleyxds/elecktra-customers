@@ -2,8 +2,8 @@ spring:
   jpa:
     database-platform: com.springboot.sqlite.SQLiteDialect
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: create-drop
+    show-sql: false
 
   datasource:
     url: jdbc:sqlite:database/database.sqlite

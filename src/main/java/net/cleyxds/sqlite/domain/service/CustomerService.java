@@ -48,7 +48,7 @@ public class CustomerService {
     String encodedPassword = passwordEncoder.encode(customer.getPassword());
 
     customer.setPassword(encodedPassword);
-    customer.setCreatedAt(LocalDate.now());
+    customer.setCreatedAt(LocalDate.now().toString());
     customer.setDevices(0);
     customer.setImage(new CustomerImage());
 

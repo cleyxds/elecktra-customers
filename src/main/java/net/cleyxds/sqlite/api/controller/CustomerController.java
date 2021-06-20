@@ -4,7 +4,6 @@ import net.cleyxds.sqlite.api.dto.CustomerDTO;
 import net.cleyxds.sqlite.domain.model.Customer;
 import net.cleyxds.sqlite.domain.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,7 @@ public class CustomerController {
   private CustomerService service;
 
   @GetMapping
-  public List<CustomerDTO> DTO() {
+  public List<CustomerDTO> list() {
     return service.findAll();
   }
 
@@ -28,7 +27,6 @@ public class CustomerController {
   }
 
   @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<Customer> create(@RequestBody Customer customer) {
     service.create(customer);
 
@@ -43,7 +41,7 @@ public class CustomerController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity delete(@PathVariable Long id) {
+  public ResponseEntity<?> delete(@PathVariable Long id) {
     service.delete(id);
 
     return ResponseEntity.noContent().build();

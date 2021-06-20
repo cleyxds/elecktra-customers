@@ -3,11 +3,8 @@ package net.cleyxds.sqlite.domain.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -35,7 +32,7 @@ public class Customer {
   private CustomerImage image;
 
   @Column(name = "created_at")
-  private LocalDate createdAt;
+  private String createdAt;
 
   private Integer devices;
 

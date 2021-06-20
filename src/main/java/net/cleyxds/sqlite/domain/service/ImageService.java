@@ -3,7 +3,7 @@ package net.cleyxds.sqlite.domain.service;
 import net.cleyxds.sqlite.api.exception.StorageException;
 import net.cleyxds.sqlite.api.exception.StorageFileNotFoundException;
 import net.cleyxds.sqlite.api.storage.StorageProperties;
-import net.cleyxds.sqlite.domain.repository.ImageRepositoryService;
+import net.cleyxds.sqlite.domain.repository.ImageServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -16,11 +16,10 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Random;
 import java.util.stream.Stream;
 
 @Service
-public class ImageService implements ImageRepositoryService {
+public class ImageService implements ImageServiceRepository {
 
 	@Autowired
 	private CustomerService customerService;
@@ -30,20 +29,6 @@ public class ImageService implements ImageRepositoryService {
 	@Autowired
 	public ImageService(StorageProperties properties) {
 		rootLocation = Paths.get(properties.getLocation());
-	}
-
-	@Override
-	public void store(MultipartFile file) {
-		try {
-			if (file.isEmpty()) {
-				throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
-			}
-			String filename = new Random().nextInt(10) + "-" + file.getOriginalFilename();
-
-			Files.copy(file.getInputStream(), rootLocation.resolve(filename));
-		} catch (IOException e) {
-			throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
-		}
 	}
 
 	@Override
@@ -70,6 +55,22 @@ public class ImageService implements ImageRepositoryService {
 		} catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
 		}
+	}
+
+	@Override
+	public Path loadById(Long id) {
+		try {
+			return Files.walk(rootLocation, 1)
+				.filter(filename -> filename.getFileName().toString().contains(id.toString()))
+				.findFirst().orElse(null);
+		} catch (IOException e) {
+			throw new StorageException("Failed to read stored files", e);
+		}
+	}
+
+	@Override
+	public void deleteById(Long id) {
+
 	}
 
 	@Override
