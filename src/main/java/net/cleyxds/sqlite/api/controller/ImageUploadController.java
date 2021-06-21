@@ -4,12 +4,12 @@ import net.cleyxds.sqlite.api.exception.StorageFileNotFoundException;
 import net.cleyxds.sqlite.domain.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,14 +42,18 @@ public class ImageUploadController {
   public ResponseEntity<URI> fetch(@PathVariable Long id) {
     URI image = MvcUriComponentsBuilder.fromMethodName(
             ImageUploadController.class,
-            "fetchImageResource", service.loadById(id).getFileName().toString()).build().toUri();
+            "fetchImageResource", service.loadById(id).getFileName().toString())
+            .build().toUri();
 
     return ResponseEntity.ok().body(image);
   }
 
-  @GetMapping("/resource/{filename}")
-  public Resource fetchImageResource(@PathVariable String filename) {
-    return service.loadAsResource(filename);
+  @GetMapping("/resource/{filename:.+}")
+  public ResponseEntity<Resource> fetchImageResource(@PathVariable String filename) {
+    Resource image = service.loadAsResource(filename);
+    return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, "image/png")
+            .body(image);
   }
 
   @ExceptionHandler(StorageFileNotFoundException.class)
