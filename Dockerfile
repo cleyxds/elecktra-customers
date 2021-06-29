@@ -1,14 +1,14 @@
 FROM openjdk:11-jre-slim
 
-ENV DIRPATH=/home/application
+ENV ROOTPATH=/home/application
 
-WORKDIR ${DIRPATH}
+WORKDIR ${ROOTPATH}
 
-VOLUME ${DIRPATH}/database
-VOLUME ${DIRPATH}/images
+VOLUME ${ROOTPATH}/database
+VOLUME ${ROOTPATH}/images
 
-COPY target/sqlite-0.0.1-SNAPSHOT.jar .
+COPY target/springcustomers-0.0.1-SNAPSHOT.jar .
 
-ENTRYPOINT ["java", "-jar", "sqlite-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "springcustomers-0.0.1-SNAPSHOT.jar"]
 
 EXPOSE 8080
