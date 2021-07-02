@@ -68,6 +68,10 @@ public class CustomerService {
     repository.deleteById(id);
   }
 
+  public Customer fetchByUsername(String username) {
+    return repository.findByUsername(username);
+  }
+
   public void attachImage(Long id, String path) {
     imageRepository.save(new CustomerImage(id, path, fetchById(id)));
   }

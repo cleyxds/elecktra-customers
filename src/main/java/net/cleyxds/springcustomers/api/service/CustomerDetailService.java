@@ -1,5 +1,7 @@
 package net.cleyxds.springcustomers.api.service;
 
+import net.cleyxds.springcustomers.domain.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,8 +13,13 @@ import java.util.ArrayList;
 @Service
 public class CustomerDetailService implements UserDetailsService {
 
+  @Autowired
+  private CustomerService service;
+
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return new User("user", "pass", new ArrayList<>());
+    var customer = service.fetchByUsername(username);
+
+    return new User(customer.getUsername(), customer.getPassword(), new ArrayList<>());
   }
 }
