@@ -1,5 +1,6 @@
 package net.cleyxds.springcustomers.api.config.security;
 
+import net.cleyxds.springcustomers.api.filter.JwtRequestFilter;
 import net.cleyxds.springcustomers.api.service.CustomerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -23,15 +25,18 @@ import java.util.Arrays;
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
   @Autowired
+  private Environment env;
+
+  @Autowired
   private CustomerDetailService customerDetail;
+
+  @Autowired
+  private JwtRequestFilter jwtRequestFilter;
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(customerDetail);
   }
-
-  @Autowired
-  private Environment env;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -41,10 +46,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     http.csrf().disable()
             .authorizeRequests().antMatchers("/authenticate").permitAll()
-            .anyRequest().authenticated();
+            .anyRequest().authenticated()
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     http.cors().disable();
-    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 
   @Bean
