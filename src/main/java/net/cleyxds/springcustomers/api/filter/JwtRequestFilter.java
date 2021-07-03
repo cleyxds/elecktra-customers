@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      var customerDetails = this.customerDetailService.loadUserByUsername(username);
+      var customerDetails = customerDetailService.loadUserByUsername(username);
 
       if (jwtTokenUtil.validateToken(jwt, customerDetails)) {
         var userPassAuthenticationToken = new UsernamePasswordAuthenticationToken(
