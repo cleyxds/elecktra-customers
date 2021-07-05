@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,9 +46,14 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     http.csrf().disable()
-            .authorizeRequests().antMatchers("/authenticate").permitAll()
+            .authorizeRequests()
+              .antMatchers("/authenticate").permitAll()
+              .antMatchers(HttpMethod.POST, "/customers").permitAll()
+              .antMatchers(HttpMethod.POST, "/images/**").permitAll()
             .anyRequest().authenticated()
-            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 
     http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
