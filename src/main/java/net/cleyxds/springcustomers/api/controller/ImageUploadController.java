@@ -52,7 +52,7 @@ public class ImageUploadController {
   public ResponseEntity<Resource> fetchImageResource(@PathVariable String filename) {
     Resource image = service.loadAsResource(filename);
     return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, "image/png")
+            .header(HttpHeaders.CONTENT_TYPE, "image/png", "image/jpeg", "image/svg+xml")
             .body(image);
   }
 

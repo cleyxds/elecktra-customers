@@ -50,14 +50,14 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
               .antMatchers("/authenticate").permitAll()
               .antMatchers(HttpMethod.POST, "/customers").permitAll()
               .antMatchers(HttpMethod.POST, "/images/**").permitAll()
+              .antMatchers("/images/resource/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-
     http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-    http.cors().disable();
+    http.cors();
   }
 
   @Bean
