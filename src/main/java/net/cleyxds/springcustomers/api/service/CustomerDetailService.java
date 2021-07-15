@@ -18,8 +18,8 @@ public class CustomerDetailService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    var customer = service.fetchByUsername(username);
+    var customer = service.fetchByEmail(username);
 
-    return new User(customer.getUsername(), customer.getPassword(), new ArrayList<>());
+    return new User(customer.getEmail(), customer.getPassword(), new ArrayList<>());
   }
 }

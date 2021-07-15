@@ -68,8 +68,8 @@ public class CustomerService {
     repository.deleteById(id);
   }
 
-  public Customer fetchByUsername(String username) {
-    return repository.findByUsername(username);
+  public Customer fetchByEmail(String email) {
+    return repository.findByEmail(email);
   }
 
   public void attachImage(Long id, String path) {
