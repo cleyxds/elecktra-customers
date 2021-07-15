@@ -24,7 +24,7 @@ public class CustomerDTO implements Serializable {
     name = entity.getName();
     login = entity.getUsername();
     devices = entity.getDevices();
-    avatar_url = entity.getImage().getPath();
+    avatar_url = null;
     created_at = entity.getCreatedAt();
   }
 

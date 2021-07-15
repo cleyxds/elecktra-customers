@@ -49,8 +49,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
               .antMatchers("/authenticate").permitAll()
               .antMatchers(HttpMethod.POST, "/customers").permitAll()
-              .antMatchers(HttpMethod.POST, "/images/**").permitAll()
-              .antMatchers("/images/resource/**").permitAll()
+              .antMatchers(HttpMethod.POST, "/images/*").permitAll()
+              .antMatchers(HttpMethod.GET,"/images/*.png").permitAll()
+              .antMatchers(HttpMethod.GET,"/images/*.jpeg").permitAll()
+              .antMatchers(HttpMethod.GET,"/images/*.jpg").permitAll()
             .anyRequest().authenticated()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -1,8 +1,9 @@
 package net.cleyxds.springcustomers.domain.service;
 
+import net.cleyxds.springcustomers.api.controller.ImageUploadController;
 import net.cleyxds.springcustomers.api.exception.StorageException;
 import net.cleyxds.springcustomers.api.exception.StorageFileNotFoundException;
-import net.cleyxds.springcustomers.api.storage.StorageProperties;
+import net.cleyxds.springcustomers.domain.storage.StorageProperties;
 import net.cleyxds.springcustomers.domain.repository.ImageServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -10,9 +11,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,12 +35,19 @@ public class ImageService implements ImageServiceRepository {
 	}
 
 	@Override
+	public Path load(String filename) {
+		return rootLocation.resolve(filename);
+	}
+
+	@Override
 	public void store(MultipartFile file, Long id) {
 		try {
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
 			}
+
 			String filename = id + "-" + file.getOriginalFilename().toLowerCase();
+
 			customerService.attachImage(id, filename);
 
 			Files.copy(file.getInputStream(), rootLocation.resolve(filename));
@@ -47,35 +57,26 @@ public class ImageService implements ImageServiceRepository {
 	}
 
 	@Override
-	public Stream<Path> loadAll() {
+	public URI loadImageById(Long id) {
 		try {
-			return Files.walk(rootLocation, 1)
-					.filter(path -> !path.equals(rootLocation))
-					.map(rootLocation::relativize);
-		} catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
-		}
-	}
-
-	@Override
-	public Path loadById(Long id) {
-		try {
-			return Files.walk(rootLocation, 1)
+			var image = Files.walk(rootLocation, 1)
 				.filter(filename -> filename.getFileName().toString().contains(id.toString()))
-				.findFirst().orElse(null);
+				.findFirst()
+				.get();
+
+			var imageUri = MvcUriComponentsBuilder
+				.fromMethodName(
+					ImageUploadController.class,
+					"serveImageUrl",
+					image.getFileName().toString()
+				)
+				.build()
+				.toUri();
+
+			return imageUri;
 		} catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
 		}
-	}
-
-	@Override
-	public void deleteById(Long id) {
-
-	}
-
-	@Override
-	public Path load(String filename) {
-		return rootLocation.resolve(filename);
 	}
 
 	@Override
@@ -95,16 +96,31 @@ public class ImageService implements ImageServiceRepository {
 	}
 
 	@Override
-	public void deleteAll() {
-		FileSystemUtils.deleteRecursively(rootLocation.toFile());
+	public boolean deleteById(Long id) {
+		var result = FileSystemUtils.deleteRecursively(loadPathById(id).toFile());
+		return result;
+	}
+
+	private Path loadPathById(Long id) {
+		try {
+			var path = Files.walk(rootLocation, 1)
+				.filter(filename -> filename.getFileName().toString().contains(id.toString()))
+				.findFirst()
+				.get();
+			return path;
+		} catch (IOException e) {
+			throw new StorageException("Failed to read stored files", e);
+		}
 	}
 
 	@Override
-	public void init() {
+	public Stream<Path> loadAll() {
 		try {
-			Files.createDirectory(rootLocation);
+			return Files.walk(rootLocation, 1)
+					.filter(path -> !path.equals(rootLocation))
+					.map(rootLocation::relativize);
 		} catch (IOException e) {
-			throw new StorageException("Could not initialize storage", e);
+			throw new StorageException("Failed to read stored files", e);
 		}
 	}
 

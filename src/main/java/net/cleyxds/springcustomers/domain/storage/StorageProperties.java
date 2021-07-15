@@ -1,4 +1,4 @@
-package net.cleyxds.springcustomers.api.storage;
+package net.cleyxds.springcustomers.domain.storage;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class StorageProperties {
 
-	//Folder location for storing files
 	private String location = "images";
 
 }

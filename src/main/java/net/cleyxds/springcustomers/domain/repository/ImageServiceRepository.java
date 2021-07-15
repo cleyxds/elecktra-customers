@@ -3,12 +3,11 @@ package net.cleyxds.springcustomers.domain.repository;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface ImageServiceRepository {
-
-	void init();
 
 	void store(MultipartFile file, Long id);
 
@@ -18,10 +17,8 @@ public interface ImageServiceRepository {
 
 	Resource loadAsResource(String filename);
 
-	void deleteAll();
+	URI loadImageById(Long id);
 
-	Path loadById(Long id);
-
-	void deleteById(Long id);
+	boolean deleteById(Long id);
 
 }

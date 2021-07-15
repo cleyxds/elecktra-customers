@@ -3,7 +3,6 @@ package net.cleyxds.springcustomers.api.controller;
 import net.cleyxds.springcustomers.api.exception.StorageFileNotFoundException;
 import net.cleyxds.springcustomers.domain.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +22,12 @@ public class ImageUploadController {
 
   @GetMapping
   public ResponseEntity<List<URI>> list() {
-    List<URI> images = service.loadAll().map(
+    var images_url = service.loadAll().map(
             path -> MvcUriComponentsBuilder.fromMethodName(ImageUploadController.class,
-                    "fetchImageResource", path.getFileName().toString()).build().toUri())
+                    "serveImageUrl", path.getFileName().toString()).build().toUri())
             .collect(Collectors.toList());
 
-    return ResponseEntity.ok().body(images);
+    return ResponseEntity.ok().body(images_url);
   }
 
   @PostMapping("/{id}")
@@ -38,22 +37,22 @@ public class ImageUploadController {
     return ResponseEntity.created(null).build();
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/customers/{id}")
   public ResponseEntity<URI> fetch(@PathVariable Long id) {
-    URI image = MvcUriComponentsBuilder.fromMethodName(
-            ImageUploadController.class,
-            "fetchImageResource", service.loadById(id).getFileName().toString())
-            .build().toUri();
+    var image_url = service.loadImageById(id);
 
-    return ResponseEntity.ok().body(image);
+    return ResponseEntity.ok().body(image_url);
   }
 
-  @GetMapping("/resource/{filename:.+}")
-  public ResponseEntity<Resource> fetchImageResource(@PathVariable String filename) {
-    Resource image = service.loadAsResource(filename);
-    return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, "image/png", "image/jpeg", "image/svg+xml")
-            .body(image);
+  @GetMapping("/{filename:.+}")
+  public ResponseEntity<?> serveImageUrl(@PathVariable String filename) {
+    var image_resource = service.loadAsResource(filename);
+    return (
+      ResponseEntity
+        .ok()
+        .header(HttpHeaders.CONTENT_TYPE, "image/png", "image/jpeg")
+        .body(image_resource)
+    );
   }
 
   @ExceptionHandler(StorageFileNotFoundException.class)

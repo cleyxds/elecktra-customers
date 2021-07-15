@@ -21,6 +21,9 @@ public class CustomerService {
   private CustomerRepository repository;
 
   @Autowired
+  private ImageService imageService;
+
+  @Autowired
   private ImageRepository imageRepository;
 
   @Autowired
@@ -65,6 +68,7 @@ public class CustomerService {
   }
 
   public void delete(Long id) {
+    imageService.deleteById(id);
     repository.deleteById(id);
   }
 
