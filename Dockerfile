@@ -1,11 +1,8 @@
 FROM openjdk:11-jre-slim
 
-ENV ROOTPATH=/home/application
+WORKDIR /home/application
 
-WORKDIR ${ROOTPATH}
-
-VOLUME ${ROOTPATH}/database
-VOLUME ${ROOTPATH}/images
+#Need to provide a PersistentVolumeClaims or a Docker Volume to the path=/home/application/database
 
 COPY target/springcustomers-0.0.1-SNAPSHOT.jar .
 
