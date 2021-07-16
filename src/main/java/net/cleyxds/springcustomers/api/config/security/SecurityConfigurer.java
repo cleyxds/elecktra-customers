@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.io.File;
 import java.util.Arrays;
 
 @Configuration
@@ -80,6 +81,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public boolean imageFolder() {
+    File imagesFolder = new File("./database/images");
+    return imagesFolder.mkdir();
   }
 
 }

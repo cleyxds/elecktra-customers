@@ -1,5 +1,7 @@
 FROM openjdk:11-jre-slim
 
+MAINTAINER cleyxds
+
 WORKDIR /home/application
 
 #Need to provide a PersistentVolumeClaims or a Docker Volume to the path=/home/application/database
