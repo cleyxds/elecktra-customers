@@ -1,15 +1,4 @@
 spring:
-  jpa:
-    database-platform: com.springboot.sqlite.SQLiteDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-
-  datasource:
-    url: jdbc:sqlite:database/database.sqlite
-    drive-class-name: org.sqlite.JDBC
-
-  servlet:
-    multipart:
-      max-file-size: 2MB
-      max-request-size: 2MB
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_SERVER}/elecktra
