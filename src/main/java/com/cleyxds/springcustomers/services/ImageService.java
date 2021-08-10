@@ -19,9 +19,6 @@ import java.util.stream.Stream;
 @Service
 public class ImageService implements ImageServiceRepo {
 
-	@Autowired
-	private CustomerService customerService;
-
 	private final Path rootLocation;
 
 	@Autowired
