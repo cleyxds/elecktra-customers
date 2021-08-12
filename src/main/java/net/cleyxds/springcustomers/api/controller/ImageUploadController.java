@@ -32,10 +32,10 @@ public class ImageUploadController {
 
   // ID COMES IN THE REQUEST HEADER
   @PostMapping("/images")
-  public ResponseEntity<?> create(@RequestParam("file") MultipartFile file, @RequestHeader Long id) {
+  public ResponseEntity<URI> create(@RequestParam("file") MultipartFile file, @RequestHeader Long id) {
     service.store(file, id);
 
-    return ResponseEntity.status(201).build();
+    return ResponseEntity.status(201).body(service.loadImageById(id));
   }
 
   @GetMapping("/images/customers/{id}")

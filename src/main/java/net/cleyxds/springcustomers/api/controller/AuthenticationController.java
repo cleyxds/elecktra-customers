@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
@@ -63,5 +60,13 @@ public class AuthenticationController {
     final String jwt = jwtTokenUtil.generateToken(customerDetails);
 
     return ResponseEntity.ok(new AuthenticationResponseDTO(jwt, customer));
+  }
+
+  @GetMapping
+  public ResponseEntity<CustomerDTO> revalidateCustomer(
+    @RequestHeader String jwt) {
+    var email = jwtTokenUtil.extractUsername(jwt);
+    var customer = customerService.fetchByEmail(email);
+    return ResponseEntity.ok().body(new CustomerDTO(customer));
   }
 }

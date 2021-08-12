@@ -22,6 +22,29 @@ Automatically creates the folder for the images on the **database** folder
 
 ## API Reference
 
+### JWT
+
+#### Create authorization token
+
+```http
+  POST /customers/token
+```
+
+| Body       | Type     | Description  |
+| :--------- | :------- | :----------- |
+| `email`    | `string` | **Required** |
+| `password` | `string` | **Required** |
+
+#### Revalidate token
+
+```http
+  GET /customers/token
+```
+
+| Header       | Type     | Description  |
+| :----------- | :------- | :----------- |
+| `jwt`        | `string` | **Required Valid JWT Token** |
+
 ### Customers
 
 #### Create customer
@@ -43,17 +66,17 @@ Automatically creates the folder for the images on the **database** folder
   GET /customers
 ```
 
-| Parameter              | Type     | Description                  |
+| Header                 | Type     | Description                  |
 | :--------------------- | :------- | :--------------------------- |
 | `Authorization Bearer` | `string` | **Required** Valid JWT Token |
 
-#### Get customer
+#### Fetch customer
 
 ```http
   GET /customers/${id}
 ```
 
-| Parameter              | Type      | Description                  |
+| Parameters             | Type      | Description                  |
 | :--------------------- | :-------- | :--------------------------- |
 | `id`                   | `integer` | **Required** Customer id     |
 | `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
@@ -64,7 +87,7 @@ Automatically creates the folder for the images on the **database** folder
   PUT /customers/${id}
 ```
 
-| Parameter              | Type      | Description                  |
+| Parameters             | Type      | Description                  |
 | :--------------------- | :-------- | :--------------------------- |
 | `id`                   | `integer` | **Required** Customer id     |
 | `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
@@ -80,7 +103,7 @@ Automatically creates the folder for the images on the **database** folder
   DELETE /customers/${id}
 ```
 
-| Parameter              | Type      | Description                  |
+| Parameters             | Type      | Description                  |
 | :--------------------- | :-------- | :--------------------------- |
 | `id`                   | `integer` | **Required** Customer id     |
 | `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
@@ -107,7 +130,7 @@ Automatically creates the folder for the images on the **database** folder
   GET /images
 ```
 
-| Parameter              | Type     | Description                  |
+| Header                 | Type     | Description                  |
 | :--------------------- | :------- | :--------------------------- |
 | `Authorization Bearer` | `string` | **Required** Valid JWT Token |
 
@@ -117,7 +140,7 @@ Automatically creates the folder for the images on the **database** folder
   GET /images/customers/${id}
 ```
 
-| Parameter              | Type      | Description                  |
+| Parameters             | Type      | Description                  |
 | :--------------------- | :-------- | :--------------------------- |
 | `id`                   | `integer` | **Required** Customer id     |
 | `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
