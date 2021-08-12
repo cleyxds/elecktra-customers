@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
 
@@ -56,22 +55,17 @@ public class WebFluxSecurityConfiguration {
       .httpBasic().disable()
       .formLogin().disable()
       .csrf().disable()
-      .cors().disable()
+      .cors(corsSpec -> {
+        var corsConfig = new CorsConfiguration().applyPermitDefaultValues();
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+        corsSpec.configurationSource(source);
+      })
       .authenticationManager(authManager)
       .securityContextRepository(securityContextRepo)
       .requestCache().requestCache(NoOpServerRequestCache.getInstance())
       .and()
       .build());
-  }
-
-  @Bean
-  CorsWebFilter corsWebFilter() {
-    CorsConfiguration corsConfig = new CorsConfiguration().applyPermitDefaultValues();
-    UrlBasedCorsConfigurationSource source =
-      new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", corsConfig);
-
-    return new CorsWebFilter(source);
   }
 
   @Bean
