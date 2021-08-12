@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtUtil {
@@ -19,7 +21,17 @@ public class JwtUtil {
   private String SECRET_KEY;
 
   public String extractUsername(String token) {
-    return extractClaim(token, Claims::getSubject);
+    Map<String, String> claims = new HashMap<>();
+    var claim = extractClaim(token, Claims::getSubject);
+    String[] pairs = claim.split(", ");
+
+    for (String pair : pairs) {
+      String[] keyValue = pair.split("=");
+      claims.put(keyValue[0], keyValue[1]);
+    }
+    var email = claims.get("email").replace("}", "");
+
+    return email;
   }
 
   public Date extractExpiration(String token) {

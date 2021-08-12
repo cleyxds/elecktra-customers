@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/authenticate")
+@RequestMapping("/customers/token")
 public class AuthenticationController {
 
   @Autowired

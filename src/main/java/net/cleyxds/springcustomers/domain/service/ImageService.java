@@ -101,12 +101,12 @@ public class ImageService implements ImageServiceRepository {
 		return result;
 	}
 
-	private Path loadPathById(Long id) {
+	public Path loadPathById(Long id) {
 		try {
 			var path = Files.walk(rootLocation, 1)
 				.filter(filename -> filename.getFileName().toString().contains(id.toString()))
 				.findFirst()
-				.get();
+				.orElse(null);
 			return path;
 		} catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);

@@ -47,7 +47,7 @@ public class CustomerService {
     return customer.orElse(null);
   }
 
-  public Customer create(Customer customer) {
+  public CustomerDTO create(Customer customer) {
     String encodedPassword = passwordEncoder.encode(customer.getPassword());
 
     customer.setPassword(encodedPassword);
@@ -55,7 +55,9 @@ public class CustomerService {
     customer.setDevices(0);
     customer.setImage(new CustomerImage());
 
-    return repository.save(customer);
+    var newCustomer = repository.save(customer);
+
+    return new CustomerDTO(newCustomer);
   }
 
   public Customer update(Long id, Customer customer) {
@@ -67,8 +69,10 @@ public class CustomerService {
     }).orElse(null);
   }
 
-  public void delete(Long id) {
-    imageService.deleteById(id);
+  public void delete(Long id, Boolean hasImage) {
+    if (hasImage) {
+      imageService.deleteById(id);
+    }
     repository.deleteById(id);
   }
 

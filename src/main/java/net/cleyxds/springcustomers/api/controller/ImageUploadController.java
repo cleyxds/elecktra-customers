@@ -1,5 +1,6 @@
 package net.cleyxds.springcustomers.api.controller;
 
+import net.cleyxds.springcustomers.api.exception.StorageException;
 import net.cleyxds.springcustomers.api.exception.StorageFileNotFoundException;
 import net.cleyxds.springcustomers.domain.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/images")
 public class ImageUploadController {
 
   @Autowired
   private ImageService service;
 
-  @GetMapping
+  @GetMapping("/images")
   public ResponseEntity<List<URI>> list() {
     var images_url = service.loadAll().map(
             path -> MvcUriComponentsBuilder.fromMethodName(ImageUploadController.class,
@@ -30,21 +30,22 @@ public class ImageUploadController {
     return ResponseEntity.ok().body(images_url);
   }
 
-  @PostMapping("/{id}")
-  public ResponseEntity<?> create(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
+  // ID COMES IN THE REQUEST HEADER
+  @PostMapping("/images")
+  public ResponseEntity<?> create(@RequestParam("file") MultipartFile file, @RequestHeader Long id) {
     service.store(file, id);
 
-    return ResponseEntity.created(null).build();
+    return ResponseEntity.status(201).build();
   }
 
-  @GetMapping("/customers/{id}")
+  @GetMapping("/images/customers/{id}")
   public ResponseEntity<URI> fetch(@PathVariable Long id) {
     var image_url = service.loadImageById(id);
 
     return ResponseEntity.ok().body(image_url);
   }
 
-  @GetMapping("/{filename:.+}")
+  @GetMapping("/images/{filename:.+}")
   public ResponseEntity<?> serveImageUrl(@PathVariable String filename) {
     var image_resource = service.loadAsResource(filename);
     return (
@@ -55,8 +56,8 @@ public class ImageUploadController {
     );
   }
 
-  @ExceptionHandler(StorageFileNotFoundException.class)
-  public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+  @ExceptionHandler({StorageFileNotFoundException.class, StorageException.class})
+  public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc, StorageException exc2) {
     return ResponseEntity.notFound().build();
   }
 
