@@ -18,7 +18,7 @@ A custom REST api for manage customers data
 
 ## Appendix
 
-Docker image automatically creates the folders for the database and images on the root folder 
+Automatically creates the folder for the images on the **database** folder 
 
 ## API Reference
 
@@ -40,12 +40,12 @@ Docker image automatically creates the folders for the database and images on th
 #### List customers
 
 ```http
-  GET /customers
+  GET /       customers
 ```
 
-| Parameter       | Type     | Description                  |
-| :-------------- | :------- | :--------------------------- |
-| `Authorization` | `string` | **Required** Valid JWT Token |
+| Parameter              | Type     | Description                  |
+| :--------------------- | :------- | :--------------------------- |
+| `Authorization Bearer` | `string` | **Required** Valid JWT Token |
 
 #### Get customer
 
@@ -53,10 +53,10 @@ Docker image automatically creates the folders for the database and images on th
   GET /customers/${id}
 ```
 
-| Parameter       | Type     | Description                  |
-| :-------------- | :------- | :--------------------------- |
-| `id`            | `string` | **Required** Customer id     |
-| `Authorization` | `string` | **Required** Valid JWT Token |
+| Parameter              | Type      | Description                  |
+| :--------------------- | :-------- | :--------------------------- |
+| `id`                   | `integer` | **Required** Customer id     |
+| `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
 
 #### Update customer
 
@@ -64,10 +64,10 @@ Docker image automatically creates the folders for the database and images on th
   PUT /customers/${id}
 ```
 
-| Parameter       | Type     | Description                  |
-| :-------------- | :------- | :--------------------------- |
-| `id`            | `string` | **Required** Customer id     |
-| `Authorization` | `string` | **Required** Valid JWT Token |
+| Parameter              | Type      | Description                  |
+| :--------------------- | :-------- | :--------------------------- |
+| `id`                   | `integer` | **Required** Customer id     |
+| `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
 
 | Body       | Type     | Description  |
 | :--------  | :------- | :----------- |
@@ -80,10 +80,10 @@ Docker image automatically creates the folders for the database and images on th
   DELETE /customers/${id}
 ```
 
-| Parameter       | Type     | Description                  |
-| :-------------- | :------- | :--------------------------- |
-| `id`            | `string` | **Required** Customer id     |
-| `Authorization` | `string` | **Required** Valid JWT Token |
+| Parameter              | Type      | Description                  |
+| :--------------------- | :-------- | :--------------------------- |
+| `id`                   | `integer` | **Required** Customer id     |
+| `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
 
 ### Images
 
@@ -93,13 +93,13 @@ Docker image automatically creates the folders for the database and images on th
   POST /images
 ```
 
-| Parameter       | Type     | Description                  |
-| :-------------- | :------- | :--------------------------- |
-| `id`            | `string` | **Required** Customer id     |
+| Header          | Type      | Description                  |
+| :-------------- | :-------- | :--------------------------- |
+| `id`            | `integer` | **Required** Customer id     |
 
-| Multipart  | Type     | Description  |
-| :--------- | :------- | :----------- |
-| `file`     | `File`   | **Required** |
+| Multipart       | Type     | Subtype               | Description  |
+| :-------------- | :------- | :-------------------- | :----------- |
+| `file`          | `Image`  | image/png, image/jpeg | **Required** |
 
 #### List customers images
 
@@ -107,9 +107,9 @@ Docker image automatically creates the folders for the database and images on th
   GET /images
 ```
 
-| Parameter       | Type     | Description                  |
-| :-------------- | :------- | :--------------------------- |
-| `Authorization` | `string` | **Required** Valid JWT Token |
+| Parameter              | Type     | Description                  |
+| :--------------------- | :------- | :--------------------------- |
+| `Authorization Bearer` | `string` | **Required** Valid JWT Token |
 
 #### Get customer image
 
@@ -117,10 +117,11 @@ Docker image automatically creates the folders for the database and images on th
   GET /images/customers/${id}
 ```
 
-| Parameter       | Type     | Description                  |
-| :-------------- | :------- | :--------------------------- |
-| `id`            | `string` | **Required** Customer id     |
-| `Authorization` | `string` | **Required** Valid JWT Token |
+| Parameter              | Type      | Description                  |
+| :--------------------- | :-------- | :--------------------------- |
+| `id`                   | `integer` | **Required** Customer id     |
+| `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
+
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
