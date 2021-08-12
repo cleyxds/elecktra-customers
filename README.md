@@ -40,7 +40,7 @@ Automatically creates the folder for the images on the **database** folder
 #### List customers
 
 ```http
-  GET /       customers
+  GET /customers
 ```
 
 | Parameter              | Type     | Description                  |
