@@ -41,11 +41,14 @@ public class JwtUtil {
 
   public String generateToken(UserDetails userDetails) {
     Map<String, Object> claims = new HashMap<>();
-    return createToken(claims, userDetails.getUsername());
+    return createToken(claims, userDetails.getUsername(), userDetails.getPassword());
   }
 
-  private String createToken(Map<String, Object> claims, String subject) {
-    return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+  private String createToken(Map<String, Object> claims, String email, String pass) {
+    var sub = new HashMap<String, String>();
+    sub.put("email", email);
+    sub.put("secret", pass);
+    return Jwts.builder().setClaims(claims).claim("sub", sub).setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
             .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
