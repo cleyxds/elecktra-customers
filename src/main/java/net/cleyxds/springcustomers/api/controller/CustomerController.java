@@ -7,11 +7,12 @@ import net.cleyxds.springcustomers.domain.model.Customer;
 import net.cleyxds.springcustomers.domain.service.CustomerService;
 import net.cleyxds.springcustomers.domain.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
@@ -25,19 +26,20 @@ public class CustomerController {
 
   @GetMapping
   public List<CustomerDTO> list() {
-    return service.findAll();
+    var customers = service.findAll();
+    return (
+      customers.stream()
+        .map(customer ->
+          service.attachAvatarUrl(customer))
+          .collect(Collectors.toList())
+    );
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<CustomerDTO> fetch(@PathVariable Long id) {
     var customer = service.fetchDTOById(id);
 
-    try {
-      customer.setAvatar_url(imageService.loadImageById(id).toString());
-    } catch (NoSuchElementException e) {
-      customer.setAvatar_url(null);
-      return ResponseEntity.ok(customer);
-    }
+    service.attachAvatarUrl(customer);
 
     return ResponseEntity.ok(customer);
   }
@@ -46,7 +48,9 @@ public class CustomerController {
   public ResponseEntity<CustomerDTO> create(@RequestBody Customer customer) {
     var customerCreated = service.create(customer);
 
-    return ResponseEntity.status(201).body(customerCreated);
+    service.attachAvatarUrl(customerCreated);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(customerCreated);
   }
 
   @PutMapping("/{id}")

@@ -14,8 +14,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
-
 @RestController
 @RequestMapping("/customers/token")
 public class AuthenticationController {
@@ -37,12 +35,12 @@ public class AuthenticationController {
 
   @PostMapping
   public ResponseEntity<AuthenticationResponseDTO> createToken(
-          @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
     try {
       authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(
-                      authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+        new UsernamePasswordAuthenticationToken(
+          authenticationRequest.getEmail(), authenticationRequest.getPassword()));
     } catch (BadCredentialsException e) {
       throw new Exception("Incorrect username and password", e);
     }
@@ -51,11 +49,7 @@ public class AuthenticationController {
 
     var customer = new CustomerDTO(customerService.fetchByEmail(customerDetails.getUsername()));
 
-    try {
-      customer.setAvatar_url(imageService.loadImageById(customer.getId()).toString());
-    } catch (NoSuchElementException e) {
-      customer.setAvatar_url(null);
-    }
+    customerService.attachAvatarUrl(customer);
 
     final String jwt = jwtTokenUtil.generateToken(customerDetails);
 
@@ -66,7 +60,10 @@ public class AuthenticationController {
   public ResponseEntity<CustomerDTO> revalidateCustomer(
     @RequestHeader String jwt) {
     var email = jwtTokenUtil.extractUsername(jwt);
-    var customer = customerService.fetchByEmail(email);
-    return ResponseEntity.ok().body(new CustomerDTO(customer));
+    var customer = new CustomerDTO(customerService.fetchByEmail(email));
+
+    customerService.attachAvatarUrl(customer);
+
+    return ResponseEntity.ok().body(customer);
   }
 }
