@@ -21,17 +21,7 @@ public class JwtUtil {
   private String SECRET_KEY;
 
   public String extractUsername(String token) {
-    Map<String, String> claims = new HashMap<>();
-    var claim = extractClaim(token, Claims::getSubject);
-    String[] pairs = claim.split(", ");
-
-    for (String pair : pairs) {
-      String[] keyValue = pair.split("=");
-      claims.put(keyValue[0], keyValue[1]);
-    }
-    var email = claims.get("email").replace("}", "");
-
-    return email;
+    return extractClaim(token, Claims::getSubject);
   }
 
   public Date extractExpiration(String token) {
@@ -53,16 +43,16 @@ public class JwtUtil {
 
   public String generateToken(UserDetails userDetails) {
     Map<String, Object> claims = new HashMap<>();
-    return createToken(claims, userDetails.getUsername(), userDetails.getPassword());
+    return createToken(claims, userDetails.getUsername());
   }
 
-  private String createToken(Map<String, Object> claims, String email, String pass) {
-    var sub = new HashMap<String, String>();
-    sub.put("email", email);
-    sub.put("secret", pass);
-    return Jwts.builder().setClaims(claims).claim("sub", sub).setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-            .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+  private String createToken(Map<String, Object> claims, String subject) {
+    return Jwts.builder()
+      .setClaims(claims)
+      .setSubject(subject)
+      .setIssuedAt(new Date(System.currentTimeMillis()))
+      .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+      .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 
   public Boolean validateToken(String token, UserDetails userDetails) {
