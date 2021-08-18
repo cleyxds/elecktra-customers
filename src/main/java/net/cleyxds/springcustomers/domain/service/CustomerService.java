@@ -7,14 +7,12 @@ import net.cleyxds.springcustomers.domain.model.CustomerImage;
 import net.cleyxds.springcustomers.domain.repository.CustomerRepository;
 import net.cleyxds.springcustomers.domain.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,38 +31,39 @@ public class CustomerService {
   private BCryptPasswordEncoder passwordEncoder;
 
   public List<CustomerDTO> findAll() {
-    List<Customer> customers = repository.findAll();
+    var customers = repository.findAll();
 
     return (
       customers.stream()
         .map(CustomerDTO::new)
+        .map(customer -> attachAvatarUrl(customer))
         .collect(Collectors.toList())
     );
   }
 
   public Customer fetchById(Long id) {
-    Optional<Customer> customer = repository.findById(id);
+    var customer = repository.findById(id);
 
     return customer.orElse(null);
   }
 
   public CustomerDTO fetchDTOById(Long id) {
-    Optional<CustomerDTO> customer = repository.findById(id).map(CustomerDTO::new);
+    var customer = repository.findById(id).map(CustomerDTO::new);
 
     return customer.orElse(null);
   }
 
   public CustomerDTO create(Customer customer) {
-    String encodedPassword = passwordEncoder.encode(customer.getPassword());
+    var encodedPassword = passwordEncoder.encode(customer.getPassword());
 
     customer.setPassword(encodedPassword);
     customer.setCreatedAt(LocalDate.now().toString());
     customer.setDevices(0);
     customer.setImage(new CustomerImage());
 
-    var newCustomer = repository.save(customer);
+    var createdCustomer = repository.save(customer);
 
-    return new CustomerDTO(newCustomer);
+    return new CustomerDTO(createdCustomer);
   }
 
   public Customer update(Long id, Customer customer) {

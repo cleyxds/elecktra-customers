@@ -6,7 +6,6 @@ import net.cleyxds.springcustomers.api.service.CustomerDetailService;
 import net.cleyxds.springcustomers.api.util.JwtUtil;
 import net.cleyxds.springcustomers.domain.model.AuthenticationRequest;
 import net.cleyxds.springcustomers.domain.service.CustomerService;
-import net.cleyxds.springcustomers.domain.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +22,6 @@ public class AuthenticationController {
 
   @Autowired
   private CustomerService customerService;
-
-  @Autowired
-  private ImageService imageService;
 
   @Autowired
   private CustomerDetailService customerDetailService;

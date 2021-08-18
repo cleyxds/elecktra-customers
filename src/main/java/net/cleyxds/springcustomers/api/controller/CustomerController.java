@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
@@ -27,12 +26,7 @@ public class CustomerController {
   @GetMapping
   public List<CustomerDTO> list() {
     var customers = service.findAll();
-    return (
-      customers.stream()
-        .map(customer ->
-          service.attachAvatarUrl(customer))
-          .collect(Collectors.toList())
-    );
+    return customers;
   }
 
   @GetMapping("/{id}")
