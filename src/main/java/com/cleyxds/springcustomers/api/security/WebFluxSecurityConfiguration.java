@@ -35,11 +35,11 @@ public class WebFluxSecurityConfiguration {
   @Bean
   @Primary
   ReactiveUserDetailsService userDetailsService() {
-    return email -> customerDetailsService.findByUsername(email);
+    return customerDetailsService::findByUsername;
   }
 
   @Bean
-  public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
+  SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
     return (
       http.authorizeExchange(
         authorizeExchangeSpec -> authorizeExchangeSpec

@@ -1,4 +1,4 @@
-package com.cleyxds.springcustomers.services;
+package com.cleyxds.springcustomers.services.interfaces;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public interface ImageServiceRepo {
+public interface ImageService {
 
 	void store(MultipartFile file, Long id);
 

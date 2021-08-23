@@ -1,7 +1,8 @@
-package com.cleyxds.springcustomers.services;
+package com.cleyxds.springcustomers.services.impl;
 
 import com.cleyxds.springcustomers.exception.StorageException;
 import com.cleyxds.springcustomers.exception.StorageFileNotFoundException;
+import com.cleyxds.springcustomers.services.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,12 +18,12 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 @Service
-public class ImageService implements ImageServiceRepo {
+public class ImageServiceImpl implements com.cleyxds.springcustomers.services.interfaces.ImageService {
 
 	private final Path rootLocation;
 
 	@Autowired
-	public ImageService(StorageProperties properties) {
+	public ImageServiceImpl(StorageProperties properties) {
 		rootLocation = Paths.get(properties.getLocation());
 	}
 

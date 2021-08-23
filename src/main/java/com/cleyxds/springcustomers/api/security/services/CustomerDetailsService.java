@@ -19,7 +19,7 @@ public class CustomerDetailsService implements ReactiveUserDetailsService {
     return (
       customerRepo.findByEmail(email)
         .flatMap(customer ->
-          Mono.just(User.withUsername(customer.getEmail()).build()))
+          Mono.justOrEmpty(User.withUsername(customer.getEmail()).build()))
     );
   }
 }

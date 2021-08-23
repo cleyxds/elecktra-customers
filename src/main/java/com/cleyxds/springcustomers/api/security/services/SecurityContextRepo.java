@@ -34,7 +34,7 @@ public class SecurityContextRepo implements ServerSecurityContextRepository {
           .filter(b -> b.startsWith(bearer))
           .map(subs -> subs.substring(bearer.length()))
           .flatMap(token ->
-            Mono.just(new UsernamePasswordAuthenticationToken(
+            Mono.justOrEmpty(new UsernamePasswordAuthenticationToken(
               token,
               token,
               Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))))

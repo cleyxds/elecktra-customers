@@ -4,7 +4,6 @@ import com.cleyxds.springcustomers.api.dto.AuthResponseDTO;
 import com.cleyxds.springcustomers.api.dto.CustomerDTO;
 import com.cleyxds.springcustomers.api.util.JWTUtil;
 import com.cleyxds.springcustomers.models.AuthRequest;
-import com.cleyxds.springcustomers.models.AuthResponse;
 import com.cleyxds.springcustomers.repos.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +13,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Component
-public class AuthHander {
+public class AuthHandler {
 
   @Autowired
   private CustomerRepo customerRepo;

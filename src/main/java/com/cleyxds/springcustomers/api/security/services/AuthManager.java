@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class AuthManager implements ReactiveAuthenticationManager {
 
   @Autowired
-  private JWTUtil jwtUtil;
+  private JWTUtil JWTTool;
 
   @Autowired
   private CustomerRepo customerRepo;
@@ -20,16 +20,15 @@ public class AuthManager implements ReactiveAuthenticationManager {
   @Override
   public Mono<Authentication> authenticate(Authentication authentication) {
     var token = authentication.getCredentials().toString();
-    var email = jwtUtil.extractUsername(token);
+    var email = JWTTool.extractUsername(token);
 
     return (
       customerRepo.findByEmail(email)
         .flatMap(customer -> {
-          if (email.equals(customer.getEmail()) && jwtUtil.isTokenValidated(token)) {
+          if (email.equals(customer.getEmail()) && JWTTool.isTokenValidated(token)) {
             return Mono.just(authentication);
-          } else {
-            return Mono.empty();
           }
+          return Mono.empty();
         })
     );
   }

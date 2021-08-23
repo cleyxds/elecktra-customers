@@ -1,6 +1,6 @@
 package com.cleyxds.springcustomers.routes;
 
-import com.cleyxds.springcustomers.handlers.AuthHander;
+import com.cleyxds.springcustomers.handlers.AuthHandler;
 import com.cleyxds.springcustomers.handlers.CustomerHandler;
 import com.cleyxds.springcustomers.handlers.ImageHandler;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +17,12 @@ public class CustomerRouter {
   @Bean
   public RouterFunction<ServerResponse> customersRouter(
     CustomerHandler customerHandler,
-    AuthHander authHander,
+    AuthHandler authHandler,
     ImageHandler imageHandler
   ) {
     return (
       RouterFunctions.route()
-        .POST("/customers/token", authHander::getToken)
+        .POST("/customers/token", authHandler::getToken)
         .POST("/customers", customerHandler::create)
         .POST("/customers/image",
           RequestPredicates.accept(MediaType.MULTIPART_FORM_DATA),
