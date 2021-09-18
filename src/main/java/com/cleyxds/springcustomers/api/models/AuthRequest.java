@@ -1,4 +1,4 @@
-package com.cleyxds.springcustomers.domain.models;
+package com.cleyxds.springcustomers.api.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

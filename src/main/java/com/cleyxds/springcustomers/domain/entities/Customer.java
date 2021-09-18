@@ -1,4 +1,4 @@
-package com.cleyxds.springcustomers.domain.models;
+package com.cleyxds.springcustomers.domain.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Customer {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable = false, unique = true)
   private Long id;
 
   @Column

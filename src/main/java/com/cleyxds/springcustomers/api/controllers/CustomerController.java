@@ -2,9 +2,7 @@ package com.cleyxds.springcustomers.api.controllers;
 
 import com.cleyxds.springcustomers.api.dtos.CustomerDTO;
 import com.cleyxds.springcustomers.api.exceptions.StorageFileNotFoundException;
-import com.cleyxds.springcustomers.domain.models.Customer;
-import com.cleyxds.springcustomers.domain.services.impl.ImageServiceImpl;
-import com.cleyxds.springcustomers.domain.services.impl.CustomerServiceImpl;
+import com.cleyxds.springcustomers.domain.entities.Customer;
 import com.cleyxds.springcustomers.api.exceptions.StorageException;
 import com.cleyxds.springcustomers.domain.services.interfaces.CustomerServiceRepo;
 import com.cleyxds.springcustomers.domain.services.interfaces.ImageServiceRepo;

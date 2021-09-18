@@ -5,8 +5,8 @@ import com.cleyxds.springcustomers.domain.repos.CustomerRepo;
 import com.cleyxds.springcustomers.domain.repos.ImageRepo;
 import com.cleyxds.springcustomers.domain.services.interfaces.CustomerServiceRepo;
 import lombok.SneakyThrows;
-import com.cleyxds.springcustomers.domain.models.Customer;
-import com.cleyxds.springcustomers.domain.models.CustomerImage;
+import com.cleyxds.springcustomers.domain.entities.Customer;
+import com.cleyxds.springcustomers.domain.entities.CustomerImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +58,7 @@ public class CustomerServiceImpl implements CustomerServiceRepo {
   public CustomerDTO create(Customer customer) {
     var encodedPassword = passwordEncoder.encode(customer.getPassword());
 
+    customer.setId(generateUID());
     customer.setPassword(encodedPassword);
     customer.setCreatedAt(LocalDate.now().toString());
     customer.setDevices(0);
@@ -99,6 +101,13 @@ public class CustomerServiceImpl implements CustomerServiceRepo {
       customerDTO.setAvatar_url(null);
     }
     return customerDTO;
+  }
+
+  private Long generateUID() {
+    var generatedId = UUID.randomUUID().toString();
+    generatedId = generatedId.replace("-","").replaceAll("[a-z]", "");
+    generatedId = generatedId.substring(0, 8);
+    return Long.parseLong(generatedId);
   }
 
 }

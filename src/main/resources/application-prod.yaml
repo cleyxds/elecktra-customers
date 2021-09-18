@@ -1,13 +1,12 @@
 spring:
   jpa:
-    database-platform: com.springboot.sqlite.SQLiteDialect
     hibernate:
       ddl-auto: update
-    show-sql: false
 
   datasource:
-    url: jdbc:sqlite:database/database.sqlite
-    drive-class-name: org.sqlite.JDBC
+    url: jdbc:mysql://${DATABASE_URL}/elecktra?characterEncoding=UTF-8&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
 
   servlet:
     multipart:

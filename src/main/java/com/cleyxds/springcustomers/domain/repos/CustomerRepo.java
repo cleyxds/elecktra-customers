@@ -1,6 +1,6 @@
 package com.cleyxds.springcustomers.domain.repos;
 
-import com.cleyxds.springcustomers.domain.models.Customer;
+import com.cleyxds.springcustomers.domain.entities.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

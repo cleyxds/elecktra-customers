@@ -1,7 +1,7 @@
 package com.cleyxds.springcustomers.domain.services.interfaces;
 
 import com.cleyxds.springcustomers.api.dtos.CustomerDTO;
-import com.cleyxds.springcustomers.domain.models.Customer;
+import com.cleyxds.springcustomers.domain.entities.Customer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

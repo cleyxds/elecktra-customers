@@ -84,7 +84,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
   @Bean
   public boolean createImagesFolder() {
-    var folder = new File("./database/images");
+    var folder = new File("images");
     return folder.mkdir();
   }
 

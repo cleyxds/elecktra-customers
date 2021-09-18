@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class StorageProperties {
 
-	private String location = "database/images";
+	private String location = "images";
 
 }

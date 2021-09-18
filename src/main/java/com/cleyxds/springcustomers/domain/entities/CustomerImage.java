@@ -1,4 +1,4 @@
-package com.cleyxds.springcustomers.domain.models;
+package com.cleyxds.springcustomers.domain.entities;
 
 import com.cleyxds.springcustomers.domain.services.ImageIdGenerator;
 import lombok.AllArgsConstructor;

@@ -3,7 +3,7 @@ package com.cleyxds.springcustomers.api.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.cleyxds.springcustomers.domain.models.Customer;
+import com.cleyxds.springcustomers.domain.entities.Customer;
 
 import java.io.Serializable;
 

@@ -3,7 +3,7 @@ package com.cleyxds.springcustomers.api.controllers;
 import com.cleyxds.springcustomers.api.dtos.AuthResponseDTO;
 import com.cleyxds.springcustomers.api.dtos.CustomerDTO;
 import com.cleyxds.springcustomers.api.utils.JWTUtil;
-import com.cleyxds.springcustomers.domain.models.AuthRequest;
+import com.cleyxds.springcustomers.api.models.AuthRequest;
 import com.cleyxds.springcustomers.api.services.CustomerDetail;
 import com.cleyxds.springcustomers.domain.services.interfaces.CustomerServiceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
