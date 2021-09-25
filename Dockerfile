@@ -7,7 +7,7 @@ COPY pom.xml /home/customers
 
 RUN mvn -f /home/customers/pom.xml clean package -D skipTests
 
-#Need to provide a PersistentVolumeClaims or a Docker Volume to the path=/database
+#Need to provide a PersistentVolume or a Docker Volume to the path=/images
 
 FROM openjdk:11-jre-slim
 

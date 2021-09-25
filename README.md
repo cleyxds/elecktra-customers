@@ -12,13 +12,10 @@ A custom REST api for manage customers data
 ## Features
 
 - Multi-user
+- Multi-device per user
 - Stateless Authentication
 - Cloud-native ready
 - Microservice architecture
-
-## Appendix
-
-Automatically creates the folder for the images on the **database** folder 
 
 ## API Reference
 
@@ -27,7 +24,7 @@ Automatically creates the folder for the images on the **database** folder
 #### Create authorization token
 
 ```http
-  POST /customers/token
+  POST /api/customers/token
 ```
 
 | Body       | Type     | Description  |
@@ -38,7 +35,7 @@ Automatically creates the folder for the images on the **database** folder
 #### Revalidate token
 
 ```http
-  GET /customers/token
+  GET /api/customers/token
 ```
 
 | Header       | Type     | Description  |
@@ -50,7 +47,7 @@ Automatically creates the folder for the images on the **database** folder
 #### Create customer
 
 ```http
-  POST /customers
+  POST /api/customers
 ```
 
 | Body       | Type     | Description  |
@@ -63,7 +60,7 @@ Automatically creates the folder for the images on the **database** folder
 #### List customers
 
 ```http
-  GET /customers
+  GET /api/customers
 ```
 
 | Header                 | Type     | Description                  |
@@ -73,7 +70,7 @@ Automatically creates the folder for the images on the **database** folder
 #### Fetch customer
 
 ```http
-  GET /customers/${id}
+  GET /api/customers/${id}
 ```
 
 | Parameters             | Type      | Description                  |
@@ -84,7 +81,7 @@ Automatically creates the folder for the images on the **database** folder
 #### Update customer
 
 ```http
-  PUT /customers/${id}
+  PUT /api/customers/${id}
 ```
 
 | Parameters             | Type      | Description                  |
@@ -100,7 +97,7 @@ Automatically creates the folder for the images on the **database** folder
 #### Delete customer
 
 ```http
-  DELETE /customers/${id}
+  DELETE /api/customers/${id}
 ```
 
 | Parameters             | Type      | Description                  |
@@ -113,7 +110,7 @@ Automatically creates the folder for the images on the **database** folder
 #### Create customer image
 
 ```http
-  POST /images
+  POST /api/images
 ```
 
 | Header          | Type      | Description                  |
@@ -127,7 +124,7 @@ Automatically creates the folder for the images on the **database** folder
 #### List customers images
 
 ```http
-  GET /images
+  GET /api/images
 ```
 
 | Header                 | Type     | Description                  |
@@ -137,17 +134,25 @@ Automatically creates the folder for the images on the **database** folder
 #### Get customer image
 
 ```http
-  GET /images/customers/${id}
+  GET /api/images/customers
 ```
+| Header          | Type      | Description                  |
+| :-------------- | :-------- | :--------------------------- |
+| `id`            | `integer` | **Required** Customer id     |
 
 | Parameters             | Type      | Description                  |
 | :--------------------- | :-------- | :--------------------------- |
-| `id`                   | `integer` | **Required** Customer id     |
 | `Authorization Bearer` | `string`  | **Required** Valid JWT Token |
 
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
+
+`DATABASE_USER` 
+
+`DATABASE_PASSWORD` 
+
+`DATABASE_URL` 
 
 `APP_PROFILE` *dev:prod*
 
@@ -156,7 +161,7 @@ To run this project, you will need to add the following environment variables to
 
 ## Tech Stack
 
-**Server:** Java, Spring Boot
+**Server:** Java, Spring Boot, MySQL
 
 
 ## Authors
