@@ -1,12 +1,19 @@
 package com.cleyxds.springcustomers.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+import java.util.Date;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "customers")
@@ -16,10 +23,10 @@ public class Customer {
   @Column(nullable = false, unique = true)
   private Long id;
 
-  @Column
+  @Column(nullable = false)
   private String name;
 
-  @Column(nullable = false)
+  @Column
   private String username;
 
   @Column(length = 60, nullable = false)
@@ -28,12 +35,10 @@ public class Customer {
   @Column(nullable = false)
   private String password;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  private CustomerImage image;
-
   @Column(name = "created_at")
-  private String createdAt;
+  private Date createdAt;
 
-  private Integer devices;
+  @OneToMany(cascade=ALL, mappedBy="customer")
+  private List<Device> devices;
 
 }
