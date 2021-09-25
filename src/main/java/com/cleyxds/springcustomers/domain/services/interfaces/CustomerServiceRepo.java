@@ -2,11 +2,11 @@ package com.cleyxds.springcustomers.domain.services.interfaces;
 
 import com.cleyxds.springcustomers.api.dtos.CustomerDTO;
 import com.cleyxds.springcustomers.domain.entities.Customer;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Repository
+@Service
 public interface CustomerServiceRepo {
 
   CustomerDTO create(Customer customer);

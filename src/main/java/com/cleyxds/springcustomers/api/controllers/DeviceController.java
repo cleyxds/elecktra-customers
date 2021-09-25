@@ -1,5 +1,6 @@
 package com.cleyxds.springcustomers.api.controllers;
 
+import com.cleyxds.springcustomers.api.dtos.CustomerDTO;
 import com.cleyxds.springcustomers.api.models.DeviceForm;
 import com.cleyxds.springcustomers.domain.services.interfaces.CustomerServiceRepo;
 import com.cleyxds.springcustomers.domain.services.interfaces.DeviceServiceRepo;
@@ -25,16 +26,18 @@ public class DeviceController {
   public ResponseEntity<?> create(@RequestBody DeviceForm form) {
     var customer = customerService.fetchById(form.getCustomerId());
 
-    var device = deviceService
-      .addDeviceToCustomer(
-        form.getDeviceId(),
-        customer
-      );
+    deviceService.addDeviceToCustomer(
+      form.getDeviceId(),
+      customer
+    );
+
+    var customerResponse = CustomerDTO.from(customer);
+    customerService.attachAvatarUrl(customerResponse);
 
     return (
       ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(device.getId())
+        .body(customerResponse)
     );
   }
 
