@@ -15,7 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/customers/token")
+@RequestMapping("/api/customers/token")
 public class AuthController {
 
   @Autowired
@@ -45,20 +45,20 @@ public class AuthController {
     final var customerDetails = customerDetail.loadUserByUsername(
       authRequest.getEmail());
 
-    var customer = new CustomerDTO(customerService.fetchByEmail(customerDetails.getUsername()));
+    var customer = CustomerDTO.from(customerService.fetchByEmail(customerDetails.getUsername()));
 
     customerService.attachAvatarUrl(customer);
 
     final String jwt = JWTTool.generateToken(customerDetails);
 
-    return ResponseEntity.status(HttpStatus.OK).body(new AuthResponseDTO(jwt, customer));
+    return ResponseEntity.status(HttpStatus.OK).body(AuthResponseDTO.from(jwt, customer));
   }
 
   @GetMapping
   public ResponseEntity<CustomerDTO> revalidateCustomer(
     @RequestHeader String jwt) {
     var email = JWTTool.extractUsername(jwt);
-    var customer = new CustomerDTO(customerService.fetchByEmail(email));
+    var customer = CustomerDTO.from(customerService.fetchByEmail(email));
 
     customerService.attachAvatarUrl(customer);
 

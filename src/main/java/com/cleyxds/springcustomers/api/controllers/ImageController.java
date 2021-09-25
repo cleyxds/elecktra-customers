@@ -21,7 +21,7 @@ public class ImageController {
   @Autowired
   private ImageServiceRepo imageService;
 
-  @GetMapping("/images")
+  @GetMapping("/api/images")
   public ResponseEntity<List<URI>> list() {
     var images_url = imageService.loadAll()
       .map(path ->
@@ -34,7 +34,7 @@ public class ImageController {
     return ResponseEntity.status(HttpStatus.OK).body(images_url);
   }
 
-  @PostMapping("/images")
+  @PostMapping("/api/images")
   public ResponseEntity<URI> create(@RequestParam("file") MultipartFile file, @RequestHeader Long id) {
     imageService.store(file, id);
     var URI =  imageService.loadImageById(id);
@@ -42,8 +42,8 @@ public class ImageController {
     return ResponseEntity.status(HttpStatus.CREATED).body(URI);
   }
 
-  @GetMapping("/images/customers/{id}")
-  public ResponseEntity<URI> fetch(@PathVariable Long id) {
+  @GetMapping("/api/images/customers")
+  public ResponseEntity<URI> fetch(@RequestHeader Long id) {
     var image_url = imageService.loadImageById(id);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(image_url);
