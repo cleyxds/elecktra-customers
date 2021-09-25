@@ -46,9 +46,7 @@ public class ImageServiceImpl implements ImageServiceRepo {
 				throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
 			}
 
-			String filename = id + "-" + file.getOriginalFilename().toLowerCase();
-
-			customerServiceImpl.attachImage(id, filename);
+			var filename = id + "-" + file.getOriginalFilename().toLowerCase();
 
 			Files.copy(file.getInputStream(), rootLocation.resolve(filename));
 		} catch (IOException e) {
@@ -64,16 +62,16 @@ public class ImageServiceImpl implements ImageServiceRepo {
 				.findFirst()
 				.get();
 
-			var imageUri = MvcUriComponentsBuilder
-				.fromMethodName(
-					ImageController.class,
-					"serveImageUrl",
-					image.getFileName().toString()
-				)
-				.build()
-				.toUri();
-
-			return imageUri;
+			return (
+				MvcUriComponentsBuilder
+					.fromMethodName(
+						ImageController.class,
+						"serveImageUrl",
+						image.getFileName().toString()
+					)
+					.build()
+					.toUri()
+			);
 		} catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
 		}
@@ -103,11 +101,12 @@ public class ImageServiceImpl implements ImageServiceRepo {
 	@Override
 	public Path loadPathById(Long id) {
 		try {
-			var path = Files.walk(rootLocation, 1)
-				.filter(filename -> filename.getFileName().toString().contains(id.toString()))
-				.findFirst()
-				.orElse(null);
-			return path;
+			return (
+				Files.walk(rootLocation, 1)
+					.filter(filename -> filename.getFileName().toString().contains(id.toString()))
+					.findFirst()
+					.orElse(null)
+			);
 		} catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
 		}

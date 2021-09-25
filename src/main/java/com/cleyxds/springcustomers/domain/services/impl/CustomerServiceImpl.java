@@ -2,55 +2,49 @@ package com.cleyxds.springcustomers.domain.services.impl;
 
 import com.cleyxds.springcustomers.api.dtos.CustomerDTO;
 import com.cleyxds.springcustomers.domain.repos.CustomerRepo;
-import com.cleyxds.springcustomers.domain.repos.ImageRepo;
 import com.cleyxds.springcustomers.domain.services.interfaces.CustomerServiceRepo;
-import lombok.SneakyThrows;
 import com.cleyxds.springcustomers.domain.entities.Customer;
-import com.cleyxds.springcustomers.domain.entities.CustomerImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import lombok.SneakyThrows;
 
 @Service
 public class CustomerServiceImpl implements CustomerServiceRepo {
 
   @Autowired
-  private CustomerRepo repository;
+  private CustomerRepo repo;
 
   @Autowired
   private ImageServiceImpl imageServiceImpl;
 
   @Autowired
-  private ImageRepo imageRepo;
-
-  @Autowired
   private BCryptPasswordEncoder passwordEncoder;
 
   public List<CustomerDTO> findAll() {
-    var customers = repository.findAll();
+    var customers = repo.findAll();
 
     return (
       customers.stream()
-        .map(CustomerDTO::new)
+        .map(CustomerDTO::from)
         .map(this::attachAvatarUrl)
         .collect(Collectors.toList())
     );
   }
 
   public Customer fetchById(Long id) {
-    var customer = repository.findById(id);
+    var customer = repo.findById(id);
 
     return customer.orElse(null);
   }
 
   public CustomerDTO fetchDTOById(Long id) {
-    var customer = repository.findById(id).map(CustomerDTO::new);
+    var customer = repo.findById(id).map(CustomerDTO::from);
 
     return customer.orElse(null);
   }
@@ -60,21 +54,20 @@ public class CustomerServiceImpl implements CustomerServiceRepo {
 
     customer.setId(generateUID());
     customer.setPassword(encodedPassword);
-    customer.setCreatedAt(LocalDate.now().toString());
-    customer.setDevices(0);
-    customer.setImage(new CustomerImage());
+    customer.setCreatedAt(Date.from(Instant.now()));
+    customer.setDevices(List.of());
 
-    var createdCustomer = repository.save(customer);
+    var createdCustomer = repo.save(customer);
 
-    return new CustomerDTO(createdCustomer);
+    return CustomerDTO.from(createdCustomer);
   }
 
   public Customer update(Long id, Customer customer) {
-    return repository.findById(id).map(updatedCustomer -> {
+    return repo.findById(id).map(updatedCustomer -> {
       updatedCustomer.setUsername(customer.getUsername());
       updatedCustomer.setEmail(customer.getEmail());
 
-      return repository.save(updatedCustomer);
+      return repo.save(updatedCustomer);
     }).orElse(null);
   }
 
@@ -82,15 +75,11 @@ public class CustomerServiceImpl implements CustomerServiceRepo {
     if (hasImage) {
       imageServiceImpl.deleteById(id);
     }
-    repository.deleteById(id);
+    repo.deleteById(id);
   }
 
   public Customer fetchByEmail(String email) {
-    return repository.findByEmail(email);
-  }
-
-  public void attachImage(Long id, String path) {
-    imageRepo.save(new CustomerImage(id, path, fetchById(id)));
+    return repo.findByEmail(email);
   }
 
   @SneakyThrows

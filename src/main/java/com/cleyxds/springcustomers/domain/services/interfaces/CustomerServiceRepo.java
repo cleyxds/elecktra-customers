@@ -2,11 +2,11 @@ package com.cleyxds.springcustomers.domain.services.interfaces;
 
 import com.cleyxds.springcustomers.api.dtos.CustomerDTO;
 import com.cleyxds.springcustomers.domain.entities.Customer;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Service
+@Repository
 public interface CustomerServiceRepo {
 
   CustomerDTO create(Customer customer);
@@ -16,7 +16,6 @@ public interface CustomerServiceRepo {
   Customer update(Long id, Customer customer);
   void delete(Long id, Boolean hasImage);
   Customer fetchByEmail(String email);
-  void attachImage(Long id, String path);
   CustomerDTO attachAvatarUrl(CustomerDTO customerDTO);
 
 }
